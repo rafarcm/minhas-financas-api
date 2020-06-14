@@ -12,15 +12,14 @@ import com.rmoraes.minhasfinancas.exception.AutenticacaoException;
 import com.rmoraes.minhasfinancas.model.entity.Usuario;
 import com.rmoraes.minhasfinancas.service.UsuarioService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioResource {
 
-	private UsuarioService service;
-
-	public UsuarioResource(UsuarioService service) {
-		this.service = service;
-	}
+	private final UsuarioService service;
 	
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/autenticar")

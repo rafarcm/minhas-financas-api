@@ -11,15 +11,13 @@ import com.rmoraes.minhasfinancas.model.entity.Usuario;
 import com.rmoraes.minhasfinancas.model.repository.UsuarioRepository;
 import com.rmoraes.minhasfinancas.service.UsuarioService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
 	
-	private UsuarioRepository repository;
-	
-	public UsuarioServiceImpl(UsuarioRepository repository) {
-		super();
-		this.repository = repository;
-	}
+	private final UsuarioRepository repository;
 
 	@Override
 	public Usuario autenticar(final String email, final String senha) {
