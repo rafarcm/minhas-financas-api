@@ -1,5 +1,6 @@
 package com.rmoraes.minhasfinancas.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.rmoraes.minhasfinancas.model.entity.Lancamento;
@@ -20,5 +21,7 @@ public interface LancamentoService {
 	void validar(Lancamento lancamento);
 	
 	Lancamento obterPorId(Long id);
+	
+	BigDecimal obterSaldoPorUsuario(Long id);
 	
 }

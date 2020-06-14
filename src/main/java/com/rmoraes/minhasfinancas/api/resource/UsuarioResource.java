@@ -2,6 +2,8 @@ package com.rmoraes.minhasfinancas.api.resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rmoraes.minhasfinancas.api.dto.UsuarioDTO;
 import com.rmoraes.minhasfinancas.exception.AutenticacaoException;
 import com.rmoraes.minhasfinancas.model.entity.Usuario;
+import com.rmoraes.minhasfinancas.service.LancamentoService;
 import com.rmoraes.minhasfinancas.service.UsuarioService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioResource {
 
 	private final UsuarioService service;
+	private final LancamentoService lancamentoService;
 	
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/autenticar")
@@ -43,6 +47,16 @@ public class UsuarioResource {
 								   .senha(dto.getSenha())
 								   .build()),
 					HttpStatus.CREATED);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@GetMapping("{id}/saldo")
+	public ResponseEntity obterSaldo(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(lancamentoService.obterSaldoPorUsuario(service.obterPorId(id).getId()));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
