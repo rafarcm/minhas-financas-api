@@ -59,4 +59,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 	}
 
+	@Override
+	public Usuario obterPorId(final Long id) {
+		final Optional<Usuario> usuario = repository.findById(id);
+		if(!usuario.isPresent()) {
+			throw new RegraNegocioException("Usuário não encontrado para o id informado.");
+		}
+		return usuario.get();
+	}
+
 }

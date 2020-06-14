@@ -19,4 +19,6 @@ public interface LancamentoService {
 	
 	void validar(Lancamento lancamento);
 	
+	Lancamento obterPorId(Long id);
+	
 }

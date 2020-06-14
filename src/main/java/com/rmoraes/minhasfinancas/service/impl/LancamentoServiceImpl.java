@@ -3,6 +3,7 @@ package com.rmoraes.minhasfinancas.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -65,6 +66,16 @@ public class LancamentoServiceImpl implements LancamentoService {
 		lancamento.setStatus(status);
 		atualizar(lancamento);
 	}
+	
+	@Override
+	public Lancamento obterPorId(final Long id) {
+		final Optional<Lancamento> lancamento = repository.findById(id);
+		if(!lancamento.isPresent()) {
+			throw new RegraNegocioException("Lançamento não encontrado para o id informado.");
+		}
+		return lancamento.get();
+	}
+
 
 	@Override
 	public void validar(final Lancamento lancamento) {
@@ -73,15 +84,15 @@ public class LancamentoServiceImpl implements LancamentoService {
 		}
 		
 		if(lancamento.getMes() == null || lancamento.getMes() < 1 || lancamento.getMes() > 12) {
-			throw new RegraNegocioException("Informe um Mês válido.");
+			throw new RegraNegocioException("Informe um mês válido.");
 		}
 		
 		if(lancamento.getAno() == null || lancamento.getAno().toString().length() != 4) {
-			throw new RegraNegocioException("Informe um Ano válido.");
+			throw new RegraNegocioException("Informe um ano válido.");
 		}
 		
 		if(lancamento.getUsuario() == null || lancamento.getUsuario().getId() == null) {
-			throw new RegraNegocioException("Informe um Usuário.");
+			throw new RegraNegocioException("Informe um usuário.");
 		}
 		
 		if(lancamento.getValor() == null || lancamento.getValor().compareTo(BigDecimal.ZERO) < 1) {
