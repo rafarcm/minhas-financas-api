@@ -1,8 +1,12 @@
 package com.rmoraes.minhasfinancas.model.repository;
 
+import static com.rmoraes.minhasfinancas.utils.TestUtils.EMAIL;
+import static com.rmoraes.minhasfinancas.utils.TestUtils.criarEPersistirUmUsuario;
+import static com.rmoraes.minhasfinancas.utils.TestUtils.criarUsuario;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +30,17 @@ public class UsuarioRepositoryTest {
 	
 	@Autowired
 	private TestEntityManager entityManager;
-	
-	private static final String EMAIL = "usuario@email.com";
-	
-	public static Usuario criarUsuario() {
-		return Usuario.builder().nome("usuario").email(EMAIL).senha("123456").build();
-	}
-	
+
 	@Test
 	public void deveVerificarAExistenciaDeUmEmail() {
 		//Cenário
-		entityManager.persist(criarUsuario());
+		criarEPersistirUmUsuario(entityManager);
 		
 		//Ação / Execução
 		boolean result = repository.existsByEmail(EMAIL);
 		
 		//Verificação
-		Assertions.assertThat(result).isTrue();
+		assertThat(result).isTrue();
 	}
 	
 	@Test
@@ -51,7 +49,7 @@ public class UsuarioRepositoryTest {
 		boolean result = repository.existsByEmail(EMAIL);
 		
 		//Verificação
-		Assertions.assertThat(result).isFalse();
+		assertThat(result).isFalse();
 	}
 	
 	@Test
@@ -60,19 +58,19 @@ public class UsuarioRepositoryTest {
 		final Usuario usuarioSalvo = repository.save(criarUsuario());
 		
 		//Verificação
-		Assertions.assertThat(usuarioSalvo.getId()).isNotNull();
+		assertThat(usuarioSalvo.getId()).isNotNull();
 	}
 	
 	@Test
 	public void deveBuscarUmUsuarioPorEmail() {
 		//Cenário
-		entityManager.persist(criarUsuario());
+		criarEPersistirUmUsuario(entityManager);
 		
 		//Ação / Execução
 		final Optional<Usuario> result = repository.findByEmail(EMAIL);
 		
 		//Verificação
-		Assertions.assertThat(result.isPresent()).isTrue();
+		assertThat(result.isPresent()).isTrue();
 	}
 
 	@Test
@@ -81,7 +79,7 @@ public class UsuarioRepositoryTest {
 		final Optional<Usuario> result = repository.findByEmail(EMAIL);
 		
 		//Verificação
-		Assertions.assertThat(result.isPresent()).isFalse();
+		assertThat(result.isPresent()).isFalse();
 	}
 
 }

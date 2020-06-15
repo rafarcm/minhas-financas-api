@@ -1,5 +1,6 @@
 package com.rmoraes.minhasfinancas.service.impl;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private final UsuarioRepository repository;
 
 	@Override
+	@Transactional(readOnly = true)
 	public Usuario autenticar(final String email, final String senha) {
 		Optional<Usuario> usuario = repository.findByEmail(email);
 		validarUsuario(usuario, senha);
@@ -30,7 +32,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Transactional
 	public Usuario salvar(final Usuario usuario) {
 		validarEmail(usuario.getEmail());
+		usuario.setDataCadastro(LocalDate.now());
 		return repository.save(usuario);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario obterPorId(final Long id) {
+		final Optional<Usuario> usuario = repository.findById(id);
+		if(!usuario.isPresent()) {
+			throw new RegraNegocioException("Usuário não encontrado para o id informado.");
+		}
+		return usuario.get();
 	}
 
 	@Override
@@ -55,15 +68,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 		if(!usuario.get().getSenha().equals(senha)) {
 			throw new AutenticacaoException("Senha inválida.");
 		}
-	}
-
-	@Override
-	public Usuario obterPorId(final Long id) {
-		final Optional<Usuario> usuario = repository.findById(id);
-		if(!usuario.isPresent()) {
-			throw new RegraNegocioException("Usuário não encontrado para o id informado.");
-		}
-		return usuario.get();
 	}
 
 }

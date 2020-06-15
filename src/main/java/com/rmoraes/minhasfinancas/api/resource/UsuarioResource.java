@@ -1,5 +1,7 @@
 package com.rmoraes.minhasfinancas.api.resource;
 
+import java.math.BigDecimal;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +58,8 @@ public class UsuarioResource {
 	@GetMapping("{id}/saldo")
 	public ResponseEntity obterSaldo(@PathVariable Long id) {
 		try {
-			return ResponseEntity.ok(lancamentoService.obterSaldoPorUsuario(service.obterPorId(id).getId()));
+			final BigDecimal saldo = lancamentoService.obterSaldoPorUsuario(service.obterPorId(id).getId());
+			return ResponseEntity.ok(saldo);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
